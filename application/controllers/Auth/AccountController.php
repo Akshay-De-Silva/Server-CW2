@@ -21,7 +21,7 @@ class AccountController extends CI_Controller
 	}
 
 	/**
-	 * 	This function
+	 * 	This function will handle the signup process
 	 */
 	public function signup()
 	{
@@ -41,11 +41,17 @@ class AccountController extends CI_Controller
 			$this->load->model('Auth/Account/User', 'user');
 			$this->user->insertUser($data);
 
+			$userDetails = array(
+				'nickname' => $data['nickname'],
+				'faction' => $data['faction'],
+			);
+
 			$this->session->set_userdata('authenticated', true);
-			$this->session->set_flashdata('status', 'User Account created. Welcome STALKER.');
+			$this->session->set_userdata('auth_user', $userDetails);
+			$this->session->set_flashdata('success', 'User Account created. Welcome STALKER.');
 
 			// todo: add this to the logs file
-
+			// todo: change to the landing page
 			$this->loginIndex();
 
 		} else {
@@ -54,4 +60,50 @@ class AccountController extends CI_Controller
 			$this->registerIndex();
 		}
 	}
+
+
+	/**
+	 * 	This function will handle the login process
+	 */
+	public function login()
+	{
+		$this->form_validation->set_rules('nickname', 'Nickname', 'required');
+		$this->form_validation->set_rules('password', 'Password', 'required');
+
+		if ($this->form_validation->run()) {
+
+			$data = array(
+				'nickname' => $this->input->post('nickname'),
+				'password' => $this->input->post('password'),
+			);
+
+			$this->load->model('Auth/Account/User', 'user');
+			$result = $this->user->loginUser($data);
+
+			if($result != false) {
+
+				$userDetails = array(
+					'nickname' => $result->nickname,
+					'faction' => $result->faction
+				);
+
+				$this->session->set_userdata('authenticated', true);
+				$this->session->set_userdata('auth_user', $userDetails);
+				$this->session->set_flashdata('success', 'Welcome back, STALKER.');
+
+				// todo: add this to the logs file
+				// todo: change to the landing page
+				$this->loginIndex();
+
+			} else {
+				$this->session->set_flashdata('error', 'Something went wrong. Please try again!');
+				$this->loginIndex();
+			}
+
+		} else {
+			$this->session->set_flashdata('error', 'Something went wrong. Please try again!');
+			$this->loginIndex();
+		}
+	}
+
 }
