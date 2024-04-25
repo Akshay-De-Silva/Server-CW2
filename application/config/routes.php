@@ -53,6 +53,11 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['login']['GET'] = 'Auth/AccountController/loginIndex';
-$route['register']['GET'] = 'Auth/AccountController/registerIndex';
-$route['signup']['POST'] = 'Auth/AccountController/signup';
+// GET METHOD ROUTES
+
+// Register / Sign up Routes
+$route['register'] = 'Auth/AccountController/registerIndex';
+
+// Login Routes Routes
+$route['login'] = 'Auth/AccountController/loginIndex';
+

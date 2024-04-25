@@ -32,13 +32,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 							<form action="<?php echo base_url('Auth/AccountController/login') ?>" method="post">
 								<div class="form-group">
-									<label for="">Nickname</label>
+									<label for="nickname">Nickname</label>
 									<input type="text" name="nickname" class="form-control">
 									<small class="text-danger"><?php echo form_error('nickname'); ?></small>
 								</div>
 
 								<div class="form-group">
-									<label for="">Password</label>
+									<label for="password">Password</label>
 									<input type="password" name="password" class="form-control">
 									<small class="text-danger"><?php echo form_error('password'); ?></small>
 								</div>

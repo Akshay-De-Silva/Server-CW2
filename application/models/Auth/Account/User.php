@@ -12,7 +12,7 @@ class User extends CI_Model
 	/**
 	 * Saves the user data into the users table in the database
 	 */
-	public function insertUser($data)
+	public function createAccount($data)
 	{
 		return $this->db->insert('users', $data);
 	}
@@ -20,7 +20,7 @@ class User extends CI_Model
 	/**
 	 * 	This function will handle the login process by verifying the login details
 	 */
-	public function loginUser($data)
+	public function login($data)
 	{
 		$this->db->select('*');
 
@@ -34,6 +34,7 @@ class User extends CI_Model
 		if($query->num_rows() === 1) {
 			$user = $query->row();
 
+			// First argument is user input, 2nd is from the Database result
 			if(password_verify($data['password'], $user->password)) {
 				return $user;
 

@@ -39,7 +39,7 @@ class AccountController extends CI_Controller
 			);
 
 			$this->load->model('Auth/Account/User', 'user');
-			$this->user->insertUser($data);
+			$this->user->createAccount($data);
 
 			$userDetails = array(
 				'nickname' => $data['nickname'],
@@ -52,7 +52,7 @@ class AccountController extends CI_Controller
 
 			// todo: add this to the logs file
 			// todo: change to the landing page
-			$this->loginIndex();
+			$this->homePage();
 
 		} else {
 
@@ -78,7 +78,7 @@ class AccountController extends CI_Controller
 			);
 
 			$this->load->model('Auth/Account/User', 'user');
-			$result = $this->user->loginUser($data);
+			$result = $this->user->login($data);
 
 			if($result != false) {
 
@@ -89,11 +89,12 @@ class AccountController extends CI_Controller
 
 				$this->session->set_userdata('authenticated', true);
 				$this->session->set_userdata('auth_user', $userDetails);
+
 				$this->session->set_flashdata('success', 'Welcome back, STALKER.');
 
 				// todo: add this to the logs file
 				// todo: change to the landing page
-				$this->loginIndex();
+				$this->homePage();
 
 			} else {
 				$this->session->set_flashdata('error', 'Something went wrong. Please try again!');
@@ -102,6 +103,19 @@ class AccountController extends CI_Controller
 
 		} else {
 			$this->session->set_flashdata('error', 'Something went wrong. Please try again!');
+			$this->loginIndex();
+		}
+	}
+
+	public function homePage()
+	{
+		// If the user is logged in
+		if($this->session->authenticated) {
+			$this->load->view('home');
+
+		// If the user is NOT logged in
+		} else {
+			$this->session->set_flashdata('error', 'You are not authorized to view this page!');
 			$this->loginIndex();
 		}
 	}
