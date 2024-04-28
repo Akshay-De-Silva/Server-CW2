@@ -35,7 +35,7 @@ $config['base_url'] = 'http://localhost/cw2/index.php/';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'signup_index.php';
+$config['index_page'] = 'index.php';
 
 /*
 |--------------------------------------------------------------------------
