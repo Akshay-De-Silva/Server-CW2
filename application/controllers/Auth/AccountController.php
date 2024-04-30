@@ -21,6 +21,18 @@ class AccountController extends CI_Controller
 	}
 
 	/**
+	 * 	This function will handle the logout process
+	 */
+	public function logout()
+	{
+		// removes everything in the session. Including the user data.
+		$this->session->sess_destroy();
+
+		$this->session->set_flashdata('success', 'Successfully logged out.');
+		$this->loginIndex();
+	}
+
+	/**
 	 * 	This function will handle the signup process
 	 */
 	public function signup()
@@ -48,7 +60,7 @@ class AccountController extends CI_Controller
 
 			$this->session->set_userdata('authenticated', true);
 			$this->session->set_userdata('auth_user', $userDetails);
-			$this->session->set_flashdata('success', 'User Account created. Welcome STALKER.');
+			$this->session->set_flashdata('success', 'User Account created.');
 
 			// todo: add this to the logs file
 			// todo: change to the landing page
@@ -89,8 +101,6 @@ class AccountController extends CI_Controller
 
 				$this->session->set_userdata('authenticated', true);
 				$this->session->set_userdata('auth_user', $userDetails);
-
-				$this->session->set_flashdata('success', 'Welcome back, STALKER.');
 
 				// todo: add this to the logs file
 				// todo: change to the landing page
