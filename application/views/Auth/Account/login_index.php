@@ -23,7 +23,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								S.T.A.L.K.E.R. PDA Network Login
 							</h1>
 						</div>
-<<<<<<< HEAD
 
 						<?php if($this->session->flashdata('success')): ?>
 							<div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
@@ -39,20 +38,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							</div>
 						<?php endif; ?>
 
-=======
-
-						<?php
-							if($this->session->flashdata('success')) {
-								echo '<p class="alert alert-success">'.$this->session->flashdata('success').'</p>';
-							}
-
-							if($this->session->flashdata('error')) {
-								echo '<p class="alert alert-error">'.$this->session->flashdata('error').'</p>';
-							}
-						?>
->>>>>>> 99814d07e412676f00e36881bb81013a6a3c02cb
 						<form class="space-y-4 md:space-y-6"
-							action="<?php echo base_url('Auth/AccountController/login') ?>" method="post">
+							  action="<?php echo base_url('Auth/AccountController/login') ?>" method="post">
 							<div>
 								<label for="nickname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nickname</label>
 								<input type="text" name="nickname" id="nickname" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

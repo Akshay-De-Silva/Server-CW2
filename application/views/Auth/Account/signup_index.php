@@ -22,7 +22,6 @@
 							</h1>
 						</div>
 
-<<<<<<< HEAD
 						<?php if($this->session->flashdata('success')): ?>
 							<div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
 								<p class="font-bold">Success</p>
@@ -36,72 +35,38 @@
 								<p><?php echo $this->session->flashdata('error'); ?></p>
 							</div>
 						<?php endif; ?>
-						
-=======
-						<?php
-							if($this->session->flashdata('success')) {
-								echo '<p class="alert alert-success">'.$this->session->flashdata('success').'</p>';
-							}
 
-							if($this->session->flashdata('error')) {
-								echo '<p class="alert alert-error">'.$this->session->flashdata('error').'</p>';
-							}
-						?>
->>>>>>> 99814d07e412676f00e36881bb81013a6a3c02cb
 						<form class="space-y-4 md:space-y-6"
 							  action="<?php echo base_url('Auth/AccountController/signup') ?>" method="post">
 							<div>
 								<label for="nickname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nickname</label>
 								<input type="text" name="nickname" id="nickname" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 									   required="">
-<<<<<<< HEAD
 								<small class="text-red-400"><?php echo form_error('nickname'); ?></small>
-=======
-								<small class="text-danger"><?php echo form_error('nickname'); ?></small>
->>>>>>> 99814d07e412676f00e36881bb81013a6a3c02cb
 							</div>
 							<div>
 								<label for="faction" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Faction</label>
 								<input type="text" name="faction" id="faction" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 									   required="">
-<<<<<<< HEAD
 								<small class="text-red-400"><?php echo form_error('faction'); ?></small>
-=======
-								<small class="text-danger"><?php echo form_error('faction'); ?></small>
->>>>>>> 99814d07e412676f00e36881bb81013a6a3c02cb
 							</div>
 							<div>
 								<label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
 								<input type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
-<<<<<<< HEAD
 								<small class="text-red-400"><?php echo form_error('password'); ?></small>
-=======
-								<small class="text-danger"><?php echo form_error('password'); ?></small>
->>>>>>> 99814d07e412676f00e36881bb81013a6a3c02cb
 							</div>
 							<div>
 								<label for="confirmPass" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
 								<input type="password" name="confirmPass" id="confirmPass" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
-<<<<<<< HEAD
 								<small class="text-red-400"><?php echo form_error('confirmPass'); ?></small>
 							</div>
 							<button type="submit" class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
 								Register
-=======
-								<small class="text-danger"><?php echo form_error('confirmPass'); ?></small>
-							</div>
-							<button type="submit" class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-								Login
->>>>>>> 99814d07e412676f00e36881bb81013a6a3c02cb
 							</button>
 							<p class="text-sm font-light text-gray-500 dark:text-gray-400">
 								Already have an account?
 								<a href="<?php echo base_url('login') ?>" class="font-medium text-primary-600 hover:underline dark:text-primary-500">
-<<<<<<< HEAD
 									Login
-=======
-									Register
->>>>>>> 99814d07e412676f00e36881bb81013a6a3c02cb
 								</a>
 							</p>
 						</form>

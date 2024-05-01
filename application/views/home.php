@@ -12,7 +12,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</head>
 
 	<body>
-<<<<<<< HEAD
 		<section class="bg-gray-50 dark:bg-gray-900">
 			<div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
 				<div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
@@ -64,17 +63,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					</div>
 				</div>
 			</div>
-		</section>
-=======
-		<div class="container">
-			<h1>S.T.A.L.K.E.R. PDA Network</h1>
-
-			<div class="button-container">
-				<button class="kw lx yz ze aai">Profile</button>
-				<button>Zone Updates</button>
-				<button>Guide</button>
-			</div>
-		</div>
->>>>>>> 99814d07e412676f00e36881bb81013a6a3c02cb
+	</section>
 	</body>
 </html>
