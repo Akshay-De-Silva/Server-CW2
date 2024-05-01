@@ -1,16 +1,16 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Landing Page</title>
+		<title>Welcome to Login</title>
 
 		<!-- Imports Tailwind CSS by its Official CDN -->
 		<script src="https://cdn.tailwindcss.com"></script>
 	</head>
-
 	<body>
 		<section class="bg-gray-50 dark:bg-gray-900">
 			<div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -19,13 +19,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				</div>
 				<div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
 					<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-						<div class="flex justify-end">
-							<a href="<?php echo base_url('logout') ?>" class="text-red-500 hover:text-red-700">Logout</a>
-						</div>
-
 						<div class="flex justify-center">
 							<h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-								S.T.A.L.K.E.R. PDA
+								Your S.T.A.L.K.E.R. Profile
 							</h1>
 						</div>
 
@@ -43,23 +39,40 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							</div>
 						<?php endif; ?>
 
-						<section class="text-center">
-							<h2 class="text-2xl text-[#ffbc00] font-bold">Welcome, <?php echo $this->session->userdata('auth_user')['nickname']; ?></h2>
-							<p class="text-lg text-[#ffbc00]">Faction: <?php echo $this->session->userdata('auth_user')['faction']; ?></p>
-						</section>
-					</div>
-					<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-						<div class="flex justify-around">
-							<a href="<?php echo base_url('profile') ?>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-								Profile
-							</a>
-							<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-								Zone Updates
-							</button>
-							<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-								Guide
+						<div class="flex flex-wrap justify-between">
+							<ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-200 w-full md:w-1/2">
+								<li class="flex items-center">
+									<span class="font-bold text-[#ffbc00]">Nickname:</span>
+									<span class="ml-2"><?php echo $userDetails->nickname ?></span>
+								</li>
+								<li class="flex items-center">
+									<span class="font-bold text-[#ffbc00]">Faction:</span>
+									<span class="ml-2"><?php echo $userDetails->faction ?></span>
+								</li>
+								<li class="flex items-center">
+									<span class="font-bold text-[#ffbc00]">Mutants Killed:</span>
+									<span class="ml-2"><?php echo $userDetails->mutants_killed ?></span>
+								</li>
+							</ul>
+							<ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-200 w-full md:w-1/2">
+								<li class="flex items-center">
+									<span class="font-bold text-[#ffbc00]">Stalkers Killed:</span>
+									<span class="ml-2"><?php echo $userDetails->stalkers_killed ?></span>
+								</li>
+								<li class="flex items-center">
+									<span class="font-bold text-[#ffbc00]">Zones Visited:</span>
+									<span class="ml-2"><?php echo $userDetails->zones_visited ?></span>
+								</li>
+							</ul>
+						</div>
+
+						<div class="flex justify-center">
+							<button
+								class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+								Edit Profile
 							</button>
 						</div>
+
 					</div>
 				</div>
 			</div>

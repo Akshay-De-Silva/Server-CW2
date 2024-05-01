@@ -9,6 +9,11 @@ class AccountController extends CI_Controller
 	 */
 	public function loginIndex()
 	{
+		// If the user is already logged in, redirect to the home page
+		if($this->session->authenticated) {
+			$this->homePage();
+		}
+
 		$this->load->view('Auth/Account/login_index');
 	}
 
@@ -17,6 +22,12 @@ class AccountController extends CI_Controller
 	 */
 	public function registerIndex()
 	{
+
+		// If the user is already logged in, redirect to the home page
+		if($this->session->authenticated) {
+			$this->homePage();
+		}
+
 		$this->load->view('Auth/Account/signup_index');
 	}
 
@@ -95,6 +106,7 @@ class AccountController extends CI_Controller
 			if($result != false) {
 
 				$userDetails = array(
+					'user_id' => $result->user_id,
 					'nickname' => $result->nickname,
 					'faction' => $result->faction
 				);
@@ -123,7 +135,7 @@ class AccountController extends CI_Controller
 		if($this->session->authenticated) {
 			$this->load->view('home');
 
-		// If the user is NOT logged in
+			// If the user is NOT logged in
 		} else {
 			$this->session->set_flashdata('error', 'You are not authorized to view this page!');
 			$this->loginIndex();

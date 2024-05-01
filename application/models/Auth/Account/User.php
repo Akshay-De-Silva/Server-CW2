@@ -47,9 +47,20 @@ class User extends CI_Model
 		}
 	}
 
-	// todo: use this for the edit user details page
-//	public function getUser($nickname)
-//	{
-//		return $this->db->get_where('users', array('nickname' => $nickname))->row();
-//	}
+	public function getProfile($user_id)
+	{
+		$this->db->select('nickname, faction, mutants_killed, stalkers_killed, zones_visited');
+		$this->db->where('user_id', $user_id);
+		$this->db->from('users');
+		$this->db->limit(1);
+
+		$query = $this->db->get();
+
+		if($query->num_rows() === 1) {
+			return $query->row();
+		} else {
+			return false;
+		}
+	}
+
 }

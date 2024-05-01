@@ -55,11 +55,11 @@ $route['translate_uri_dashes'] = FALSE;
 
 // GET METHOD ROUTES
 
-// Register / Sign up Routes
+// AUTH Routes
 $route['register'] = 'Auth/AccountController/registerIndex';
-
-// Login Routes Routes
 $route['login'] = 'Auth/AccountController/loginIndex';
-
 $route['logout'] = 'Auth/AccountController/logout';
+
+// PROFILE Routes
+$route['profile'] = 'Auth/ProfileController/index';
 
