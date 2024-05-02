@@ -14,7 +14,17 @@ class User extends CI_Model
 	 */
 	public function createAccount($data)
 	{
-		return $this->db->insert('users', $data);
+		$inserted = $this->db->insert('users', $data);
+
+		// This is so that I can get the user details after the insert and change the details in the controller
+		if ($inserted) {
+			$id = $this->db->insert_id();
+			$query = $this->db->get_where('users', array('user_id' => $id));
+
+			return $query->row();
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -47,6 +57,9 @@ class User extends CI_Model
 		}
 	}
 
+	/**
+	 * 	This function will get the user profile
+	 */
 	public function getProfile($user_id)
 	{
 		$this->db->select('nickname, faction, mutants_killed, stalkers_killed, zones_visited');
@@ -61,6 +74,15 @@ class User extends CI_Model
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * 	This function will update the user profile
+	 */
+	public function updateProfile($user_id, $data)
+	{
+		$this->db->where('user_id', $user_id);
+		return $this->db->update('users', $data);
 	}
 
 }

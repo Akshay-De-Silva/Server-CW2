@@ -12,9 +12,9 @@ class AccountController extends CI_Controller
 		// If the user is already logged in, redirect to the home page
 		if($this->session->authenticated) {
 			$this->homePage();
+		} else {
+			$this->load->view('Auth/Account/login_index');
 		}
-
-		$this->load->view('Auth/Account/login_index');
 	}
 
 	/**
@@ -22,13 +22,12 @@ class AccountController extends CI_Controller
 	 */
 	public function registerIndex()
 	{
-
 		// If the user is already logged in, redirect to the home page
 		if($this->session->authenticated) {
 			$this->homePage();
+		} else {
+			$this->load->view('Auth/Account/signup_index');
 		}
-
-		$this->load->view('Auth/Account/signup_index');
 	}
 
 	/**
@@ -36,8 +35,9 @@ class AccountController extends CI_Controller
 	 */
 	public function logout()
 	{
-		// removes everything in the session. Including the user data.
-		$this->session->sess_destroy();
+		// removes the session keys called authenticated and user_data
+		$this->session->unset_userdata('authenticated');
+		$this->session->unset_userdata('auth_user');
 
 		$this->session->set_flashdata('success', 'Successfully logged out.');
 		$this->loginIndex();
@@ -51,7 +51,7 @@ class AccountController extends CI_Controller
 		$this->form_validation->set_rules('nickname', 'Nickname', 'required|is_unique[users.nickname]');
 		$this->form_validation->set_rules('faction', 'Faction', 'required');
 		$this->form_validation->set_rules('password', 'Password', 'required');
-		$this->form_validation->set_rules('confirmPass', 'Confirm Password', 'required|matches[password]'); //probably need something to check if same as password
+		$this->form_validation->set_rules('confirmPass', 'Confirm Password', 'required|matches[password]');
 
 		if ($this->form_validation->run()) {
 
@@ -62,11 +62,13 @@ class AccountController extends CI_Controller
 			);
 
 			$this->load->model('Auth/Account/User', 'user');
-			$this->user->createAccount($data);
+			$newUser = $this->user->createAccount($data);
 
+			// gets the newly created user details from the model and stores it in the session
 			$userDetails = array(
-				'nickname' => $data['nickname'],
-				'faction' => $data['faction'],
+				'user_id' => $newUser->user_id,
+				'nickname' => $newUser->nickname,
+				'faction' => $newUser->faction,
 			);
 
 			$this->session->set_userdata('authenticated', true);

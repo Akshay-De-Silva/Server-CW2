@@ -55,6 +55,8 @@ $route['translate_uri_dashes'] = FALSE;
 
 // GET METHOD ROUTES
 
+$route['home'] = 'Auth/AccountController/homePage';
+
 // AUTH Routes
 $route['register'] = 'Auth/AccountController/registerIndex';
 $route['login'] = 'Auth/AccountController/loginIndex';
@@ -62,4 +64,4 @@ $route['logout'] = 'Auth/AccountController/logout';
 
 // PROFILE Routes
 $route['profile'] = 'Auth/ProfileController/index';
-
+$route['profile/edit'] = 'Auth/ProfileController/edit';
