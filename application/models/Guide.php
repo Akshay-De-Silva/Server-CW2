@@ -14,7 +14,6 @@ class Guide extends CI_Model
 		$this->db->select('*');
 		$this->db->from('guides');
 		$this->db->like('entry_name', $search_string); // using like to search for the title similar to the search string
-		$this->db->or_like('entry_description', $search_string);
 		$query = $this->db->get();
 
 		if($query->num_rows() > 0) {

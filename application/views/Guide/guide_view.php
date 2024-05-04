@@ -26,22 +26,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		</div>
 		<div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
 			<ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-				<li>
+				<li class="p-5">
 					<a href="<?php echo base_url('home') ?>" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
 						Home
 					</a>
 				</li>
-				<li>
+				<li class="p-5">
 					<a href="<?php echo base_url('profile') ?>" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
 						Profile
 					</a>
 				</li>
-				<li>
+				<li class="p-5">
 					<a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
 						Zone Updates
 					</a>
 				</li>
-				<li>
+				<li class="p-5">
 					<a href="<?php echo base_url('guide') ?>" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
 						Guide
 					</a>
@@ -50,6 +50,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		</div>
 	</div>
 </nav>
+
+<!-- background image -->
+<style>
+	section {
+		background-image: url('http://localhost/cw2/images/bg.jpg');
+		background-size: cover;
+		background-position: center;
+	}
+</style>
 
 <body x-data="guide"
 	  class="bg-gray-50 dark:bg-gray-900">
@@ -72,15 +81,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						type="text" name="search" id="search" class="block w-full p-3 text-sm dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded focus:outline-none focus:border-blue-400" placeholder="Search for a guide...">
 				</div>
 				<button
-					@click="search()"
+					@click="await $nextTick(); search()"
 					type="button" class="w-full p-3 mt-4 text-sm font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
 					Search for Guide(s)
+				</button>
+
+				<button
+					@click="await $nextTick(); showAll()"
+					type="button" class="w-full p-3 mt-4 text-sm font-semibold text-white bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600">
+					Display all Guides
 				</button>
 
 				<template x-if="guideResults.length > 0">
 
 					<button
-						@click="guideResults = []"
+						@click="await $nextTick(); guideResults = []"
 						type="button" class="w-full p-3 mt-4 text-sm font-semibold text-white bg-red-400 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600">
 						Clear Result(s)
 					</button>
@@ -102,7 +117,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 											<article class="relative isolate flex flex-col gap-8 lg:flex-row">
 												<div class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0">
-													<img src="https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3603&q=80" alt="" class="absolute inset-0 h-full w-full rounded-2xl bg-gray-50 object-cover">
+													<img
+														:src="guide.entry_image_path"
+														alt="" class="absolute inset-0 h-full w-full rounded-2xl bg-gray-50 object-cover">
 													<div class="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
 												</div>
 												<div>
@@ -161,22 +178,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			},
 
 			search() {
-
-				// send an AJAX request to the server to search for the guide
 				axios.post('<?php echo base_url('Guide/GuideController/search') ?>', {
 					search: this.searchText
+				},{
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					}
 				})
 				.then(response => {
-					console.log('success');
-					console.log(response.data);
-					//set this.guideResults as an array since the response in a json
+					console.log('success from controller request');
+
+					if(response.data === false) {
+						this.guideResults = [];
+						return;
+					}
+
 					this.guideResults = response.data;
 				})
 				.catch(error => {
 					console.log('error');
 					console.log(error);
 				})
-			}
+			},
+
+			showAll() {
+				this.searchText = '';
+				this.search();
+			},
 
 		}))
 	})

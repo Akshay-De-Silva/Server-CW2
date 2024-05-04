@@ -11,6 +11,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<script src="https://cdn.tailwindcss.com"></script>
 	</head>
 
+	<!-- background image -->
+	<style>
+		section {
+			background-image: url('http://localhost/cw2/images/bg.jpg');
+			background-size: cover;
+			background-position: center;
+		}
+	</style>
+
 	<body>
 		<section class="bg-gray-50 dark:bg-gray-900">
 			<div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -43,10 +52,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							</div>
 						<?php endif; ?>
 
-						<section class="text-center">
+						<div class="text-center">
 							<h2 class="text-2xl text-[#ffbc00] font-bold">Welcome, <?php echo $this->session->userdata('auth_user')['nickname']; ?></h2>
 							<p class="text-lg text-[#ffbc00]">Faction: <?php echo $this->session->userdata('auth_user')['faction']; ?></p>
-						</section>
+						</div>
 					</div>
 					<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
 						<div class="flex justify-around">

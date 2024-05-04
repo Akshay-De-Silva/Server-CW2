@@ -10,6 +10,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<!-- Imports Tailwind CSS by its Official CDN -->
 	<script src="https://cdn.tailwindcss.com"></script>
 </head>
+
+<!-- background image -->
+<style>
+	section {
+		background-image: url('http://localhost/cw2/images/bg.jpg');
+		background-size: cover;
+		background-position: center;
+	}
+</style>
+
 <body>
 <section class="bg-gray-50 dark:bg-gray-900">
 	<div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
