@@ -56,9 +56,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
 								Zone Updates
 							</button>
-							<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+							<a href="<?php echo base_url('guide') ?>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
 								Guide
-							</button>
+							</a>
 						</div>
 					</div>
 				</div>

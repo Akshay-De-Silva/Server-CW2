@@ -65,3 +65,6 @@ $route['logout'] = 'Auth/AccountController/logout';
 // PROFILE Routes
 $route['profile'] = 'Auth/ProfileController/index';
 $route['profile/edit'] = 'Auth/ProfileController/edit';
+
+// GUIDE Routes
+$route['guide'] = 'Guide/GuideController/index';
