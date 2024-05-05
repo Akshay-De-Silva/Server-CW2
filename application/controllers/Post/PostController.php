@@ -58,8 +58,7 @@ class PostController extends CI_Controller
 
 
 	/**
-	 * @param $id
-	 * @return void
+	 * Displays the post that the user wants to view. With all the details.
 	 */
 	public function viewPost($id)
 	{
@@ -95,6 +94,60 @@ class PostController extends CI_Controller
 				$this->index();
 			}
 		}
+	}
+
+	/**
+	 * REST API FUNCTION
+	 * This upvotes the post
+	 */
+	public function upvote()
+	{
+		$post_id = $this->input->post('post_id');
+		$this->load->model('Post', 'post');
+
+		// upvotes the post and update it in the posts table by 1
+		$this->db->set('votes', 'votes+1', FALSE); // addition
+		$this->db->where('post_id', $post_id);
+		$this->db->update('posts');
+
+		// gets the updated votes count
+		$this->db->select('votes');
+		$this->db->from('posts');
+		$this->db->where('post_id', $post_id);
+		$updatedVotes = $this->db->get()->row()->votes;
+
+		// returns the response as a json, but specifically ONLY the new votes number
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode(array('votes' => $updatedVotes)));
+
+	}
+
+	/**
+	 * REST API FUNCTION
+	 * This Downvotes a post
+	 */
+	public function downvote()
+	{
+		$post_id = $this->input->post('post_id');
+		$this->load->model('Post', 'post');
+
+		// downvotes the post and update it in the posts table by 1
+		$this->db->set('votes', 'votes-1', FALSE); // subtract
+		$this->db->where('post_id', $post_id);
+		$this->db->update('posts');
+
+		// gets the updated votes count
+		$this->db->select('votes');
+		$this->db->from('posts');
+		$this->db->where('post_id', $post_id);
+		$updatedVotes = $this->db->get()->row()->votes;
+
+		// returns the response as a json, but specifically ONLY the new votes number
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode(array('votes' => $updatedVotes)));
+
 	}
 
 }

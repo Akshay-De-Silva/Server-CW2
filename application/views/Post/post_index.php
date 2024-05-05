@@ -81,26 +81,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 				<template x-if="allPosts.length > 0">
 					<template x-for="post in allPosts" :key="post.post_id">
-						<div class="bg-gray-700 shadow overflow-hidden sm:rounded-lg my-4 p-4">
-							<div>
-								<div class="flex items-start space-x-4">
-									<div class="flex-1">
-										<div class="text-sm text-white">
-											<p class="text-white">S.T.A.L.K.E.R: <span x-text="post.user_nickname"  class="text-blue-400"></span></p>
+						<a :href="'<?php echo base_url('posts/view/') ?>' + post.post_id">
+							<div class="bg-gray-700 shadow overflow-hidden sm:rounded-lg my-4 p-4">
+								<div>
+									<div class="flex items-start space-x-4">
+										<div class="flex-1">
+											<div class="text-sm text-white">
+												<p class="text-white">S.T.A.L.K.E.R: <span x-text="post.user_nickname"  class="text-blue-400"></span></p>
+											</div>
+											<h3 class="mt-2 text-lg leading-6 font-medium text-gray-900">
+												<p
+												   class="text-[#ffbc00] text-3xl font-bold hover:text-white" x-text="post.post_title"></p>
+											</h3>
 										</div>
-										<h3 class="mt-2 text-lg leading-6 font-medium text-gray-900">
-											<a :href="'<?php echo base_url('posts/view/') ?>' + post.post_id"
-											   class="text-[#ffbc00] text-3xl font-bold hover:text-white" x-text="post.post_title"></a>
-										</h3>
 									</div>
-								</div>
-								<div class="mt-4 flex items-center">
-									<div class="flex text-sm">
-										<p class="text-red-600"> Faction: <span x-text="post.user_faction" class="text-white"></span></p>
+									<div class="mt-4 flex items-center">
+										<div class="flex text-sm">
+											<p class="text-red-600"> Faction: <span x-text="post.user_faction" class="text-white"></span></p>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+						</a>
 					</template>
 				</template>
 				<template x-if="allPosts.length === 0">

@@ -119,22 +119,56 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	document.addEventListener('alpine:init', () => {
 		Alpine.data('zone_show', () => ({
 
-			post_id: '<?php echo $post['post_id'] ?>',
-			user_id: '<?php echo $post['user_id'] ?>',
-			votes: '<?php echo $post['votes'] ?>',
+			post_id: <?php echo $post['post_id'] ?>,
+			user_id: <?php echo $post['user_id'] ?>,
+			votes: <?php echo $post['votes'] ?>,
 
 			// triggered when the page is loaded
 			init() {
 				console.log('Zone show page loaded.');
 			},
 
+			// REST API call to upvote a post
 			upvote() {
-				console.log('Upvoted');
+				axios.post('<?php echo base_url('Post/PostController/upvote') ?>', {
+					post_id: this.post_id
+				},{
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					}
+				})
+				.then(response => {
+					console.log('Post Upvoted.')
+
+					// Update the votes count from the API's response
+					this.votes = response.data.votes;
+				})
+				.catch(error => {
+					console.log('Error Upvoting Post.');
+					console.log(error);
+				});
 			},
 
+			// REST API call to downvote a post
 			downvote() {
-				console.log('Downvoted');
-			}
+				axios.post('<?php echo base_url('Post/PostController/downvote') ?>', {
+					post_id: this.post_id
+				},{
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					}
+				})
+				.then(response => {
+					console.log('Post Downvoted.')
+
+					// Update the votes count from the API's response
+					this.votes = response.data.votes;
+				})
+				.catch(error => {
+					console.log('Error Downvoting Post.');
+					console.log(error);
+				});
+			},
 
 		}))
 	})
