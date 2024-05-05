@@ -10,7 +10,7 @@ class GuideController extends CI_Controller
 	public function index()
 	{
 		// If the user is not logged in, redirect to the login page
-		if(!$this->session->authenticated) {
+		if(!get_cookie('authenticated')) {
 			$this->session->set_flashdata('error', 'Please login to view your profile.');
 			$this->load->view('Auth/Account/login_index');
 
@@ -49,8 +49,6 @@ class GuideController extends CI_Controller
 				->set_content_type('application/json')
 				->set_output(json_encode(false));
 		}
-
-//		$this->load->view('Guide/guide_search', $data);
 	}
 
 }

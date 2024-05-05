@@ -10,7 +10,7 @@ class AccountController extends CI_Controller
 	public function loginIndex()
 	{
 		// If the user is already logged in, redirect to the home page
-		if($this->session->authenticated) {
+		if(get_cookie('authenticated')) {
 			$this->homePage();
 		} else {
 			$this->load->view('Auth/Account/login_index');
@@ -23,7 +23,7 @@ class AccountController extends CI_Controller
 	public function registerIndex()
 	{
 		// If the user is already logged in, redirect to the home page
-		if($this->session->authenticated) {
+		if(get_cookie('authenticated')) {
 			$this->homePage();
 		} else {
 			$this->load->view('Auth/Account/signup_index');
@@ -35,9 +35,12 @@ class AccountController extends CI_Controller
 	 */
 	public function logout()
 	{
-		// removes the session keys called authenticated and user_data
-		$this->session->unset_userdata('authenticated');
+		// removes the session key user_data
 		$this->session->unset_userdata('auth_user');
+
+		// remove authenticated cookie
+		delete_cookie('authenticated');
+		unset($_COOKIE['authenticated']); // removes the cookie from the global $_COOKIE array
 
 		$this->session->set_flashdata('success', 'Successfully logged out.');
 		$this->loginIndex();
@@ -71,7 +74,10 @@ class AccountController extends CI_Controller
 				'faction' => $newUser->faction,
 			);
 
-			$this->session->set_userdata('authenticated', true);
+			// sets the cookie for 1 hour
+			set_cookie('authenticated', true, 3600);
+			$_COOKIE['authenticated'] = true; // sets the cookie in the global $_COOKIE array
+
 			$this->session->set_userdata('auth_user', $userDetails);
 			$this->session->set_flashdata('success', 'User Account created.');
 
@@ -113,7 +119,10 @@ class AccountController extends CI_Controller
 					'faction' => $result->faction
 				);
 
-				$this->session->set_userdata('authenticated', true);
+				// sets the cookie for 1 hour
+				set_cookie('authenticated', true, 3600);
+				$_COOKIE['authenticated'] = true; // sets the cookie in the global $_COOKIE array
+
 				$this->session->set_userdata('auth_user', $userDetails);
 
 				// todo: add this to the logs file
@@ -134,11 +143,11 @@ class AccountController extends CI_Controller
 	public function homePage()
 	{
 		// If the user is logged in
-		if($this->session->authenticated) {
+		if(get_cookie('authenticated')) {
 			$this->load->view('home');
+		} else {
 
 			// If the user is NOT logged in
-		} else {
 			$this->session->set_flashdata('error', 'You are not authorized to view this page!');
 			$this->loginIndex();
 		}

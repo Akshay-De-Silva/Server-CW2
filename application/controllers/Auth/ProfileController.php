@@ -10,7 +10,7 @@ class ProfileController extends CI_Controller
 	public function index()
 	{
 		// If the user is not logged in, redirect to the login page
-		if(!$this->session->authenticated) {
+		if(!get_cookie('authenticated')) {
 
 			$this->session->set_flashdata('error', 'Please login to view your profile.');
 			$this->load->view('Auth/Account/login_index');
@@ -33,7 +33,7 @@ class ProfileController extends CI_Controller
 	 */
 	public function edit() {
 		// If the user is not logged in, redirect to the login page
-		if(!$this->session->authenticated) {
+		if(!get_cookie('authenticated')) {
 
 			$this->session->set_flashdata('error', 'Please login to view your profile.');
 			$this->load->view('Auth/Account/login_index');
