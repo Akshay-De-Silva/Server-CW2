@@ -71,6 +71,6 @@ $route['guide'] = 'Guide/GuideController/index';
 
 // POST (Blog) Routes
 $route['posts'] = 'Post/PostController/index';
-$route['posts/create'] = 'Post/PostController/create';
+$route['posts/create'] = 'Post/PostController/createPost';
 $route['posts/view/(:num)'] = 'Post/PostController/viewPost/$1';
-$route['posts/delete/(:num)'] = 'Post/PostController/delete/$1';
+$route['posts/delete/(:num)'] = 'Post/PostController/deletePost/$1';

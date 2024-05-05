@@ -96,6 +96,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								</svg>
 							</button>
 						</div>
+
+						<!-- Delete post button that is only visible to the post owner -->
+						<?php if($this->session->userdata('auth_user')['user_id'] == $post['user_id']): ?>
+							<div class="mt-4 mr-3">
+								<a href="<?php echo base_url('posts/delete/' . $post['post_id']) ?>" class="inline-block px-4 py-2 text-white bg-red-600 dark:bg-red-400 rounded hover:bg-red-700 dark:hover:bg-red-500 transition-colors duration-200"
+								   onclick="return confirm('Are you sure you want to delete this post?')">
+									Delete Post
+								</a>
+							</div>
+						<?php endif; ?>
+
 					</div>
 				</div>
 				<div class="flex justify-center">

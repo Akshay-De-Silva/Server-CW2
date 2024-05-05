@@ -6,16 +6,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Zone Posts</title>
+	<title>Profile</title>
 
 	<!-- Imports Tailwind CSS by its Official CDN -->
 	<script src="https://cdn.tailwindcss.com"></script>
-
-	<!-- Alpine JS Javascript framework CDN -->
-	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-	<!-- Axios CDN -->
-	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
@@ -60,18 +54,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	}
 </style>
 
-<body x-data="zone_posts"
-	  class="bg-gray-50 dark:bg-gray-900">
-<section>
-	<div class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-		<div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white pt-24">
+<body>
+<section class="bg-gray-50 dark:bg-gray-900">
+	<div class="flex w-3/4 flex-col items-center justify-center px-6 py-8 mx-auto md:min-h-screen lg:py-0">
+		<div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
 			<img class="w-20 w-20 mr-2" src="https://png.pngtree.com/png-clipart/20230816/original/pngtree-radiation-symbol-of-activity-on-white-background-picture-image_7986533.png" alt="logo">
 		</div>
-		<div class="w-2/4 bg-white rounded-lg shadow dark:border md:mt-0 xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+		<div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
 			<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
 				<div class="flex justify-center">
 					<h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-						Zone Updates
+						Create Post
 					</h1>
 				</div>
 
@@ -89,86 +82,32 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					</div>
 				<?php endif; ?>
 
-				<div class="flex justify-center mt-4">
-					<p class="text-sm font-semibold text-gray-600 dark:text-gray-300">Results found: <span x-text="allPosts.length"></span></p>
-				</div>
+				<form class="space-y-6 md:space-y-6"
+					  action="<?php echo base_url('Post/PostController/submitPost') ?>" method="post">
 
-				<div class="flex justify-center mt-4">
-					<a href="<?php echo base_url('posts/create') ?>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-						Create a New Post
-					</a>
-				</div>
-
-				<template x-if="allPosts.length > 0">
-					<template x-for="post in allPosts" :key="post.post_id">
-						<a :href="'<?php echo base_url('posts/view/') ?>' + post.post_id">
-							<div class="bg-gray-700 shadow overflow-hidden sm:rounded-lg my-4 p-4">
-								<div>
-									<div class="flex items-start space-x-4">
-										<div class="flex-1">
-											<div class="text-sm text-white">
-												<p class="text-white">S.T.A.L.K.E.R: <span x-text="post.user_nickname"  class="text-blue-400"></span></p>
-											</div>
-											<h3 class="mt-2 text-lg leading-6 font-medium text-gray-900">
-												<p
-												   class="text-[#ffbc00] text-3xl font-bold hover:text-white" x-text="post.post_title"></p>
-											</h3>
-										</div>
-									</div>
-									<div class="mt-4 flex items-center">
-										<div class="flex text-sm">
-											<p class="text-red-600"> Faction: <span x-text="post.user_faction" class="text-white"></span></p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</a>
-					</template>
-				</template>
-				<template x-if="allPosts.length === 0">
-					<div class="flex justify-center mt-4">
-						<p class="text-sm font-semibold text-gray-600 dark:text-gray-300">No posts found about the Zone yet....</p>
+					<div>
+						<label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Post Title</label>
+						<input type="text"
+							   name="title" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+						<small class="text-red-400"><?php echo form_error('title'); ?></small>
 					</div>
-				</template>
+					<div>
+						<label for="content" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Post Content</label>
+						<textarea type="text"
+								  rows="5"
+							   name="content" id="content" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+						<small class="text-red-400"><?php echo form_error('content'); ?></small>
+					</div>
+
+					<button type="submit"
+							class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+						Publish
+					</button>
+				</form>
+
 			</div>
 		</div>
 	</div>
 </section>
 </body>
 </html>
-
-<script>
-	document.addEventListener('alpine:init', () => {
-		Alpine.data('zone_posts', () => ({
-
-			allPosts: [],
-
-			// triggered when the page is loaded
-			init() {
-				console.log('Zone Updates page loaded.');
-
-				// on page load with the init() function, fetch all posts
-				this.getAllPosts();
-			},
-
-			getAllPosts() {
-				axios.post('<?php echo base_url('Post/PostController/getAllPosts') ?>')
-					.then(response => {
-						console.log('Success from PostController Request getAllPosts function.');
-
-						if(response.data === false) {
-							this.allPosts = [];
-							return;
-						}
-
-						this.allPosts = response.data;
-					})
-					.catch(error => {
-						console.log('An error occurred while fetching all posts.');
-						console.log(error);
-					})
-			},
-
-		}))
-	})
-</script>
