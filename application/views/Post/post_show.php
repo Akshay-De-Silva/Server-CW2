@@ -6,10 +6,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Profile</title>
+	<title>Zone Posts</title>
 
 	<!-- Imports Tailwind CSS by its Official CDN -->
 	<script src="https://cdn.tailwindcss.com"></script>
+
+	<!-- Alpine JS Javascript framework CDN -->
+	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+	<!-- Axios CDN -->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
@@ -54,78 +60,82 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	}
 </style>
 
-<body>
-<section class="bg-gray-50 dark:bg-gray-900">
-	<div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-		<div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+<body x-data="zone_show"
+	  class="bg-gray-50 dark:bg-gray-900">
+<section>
+	<div class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+		<div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white pt-24">
 			<img class="w-20 w-20 mr-2" src="https://png.pngtree.com/png-clipart/20230816/original/pngtree-radiation-symbol-of-activity-on-white-background-picture-image_7986533.png" alt="logo">
 		</div>
-		<div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+		<div class="w-2/4 bg-white rounded-lg shadow dark:border md:mt-0 xl:p-0 dark:bg-gray-800 dark:border-gray-700">
 			<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+				<div class="flex justify-between items-center">
+					<div>
+						<h2 class="text-lg font-bold leading-tight tracking-tight text-gray-900 dark:text-white">
+							S.T.A.L.K.E.R Nickname : <span class="text-blue-600"><?php echo $post['user_nickname'] ?></span>
+						</h2>
+						<p class="text-sm text-gray-600 dark:text-gray-300">
+							Faction: <span class="text-red-400"><?php echo $post['user_faction'] ?></span>
+						</p>
+					</div>
+					<div>
+						<div class="flex items-center space-x-2">
+							<button class="p-2 bg-gray-200 rounded-full dark:bg-gray-700"
+									@click="upvote()">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+								</svg>
+							</button>
+							<span x-text="votes"
+								  class="text-gray-700 dark:text-gray-300">
+							</span>
+							<button class="p-2 bg-gray-200 rounded-full dark:bg-gray-700"
+									@click="downvote()">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+								</svg>
+							</button>
+						</div>
+					</div>
+				</div>
 				<div class="flex justify-center">
-					<h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-						Your S.T.A.L.K.E.R. Profile
+					<h1 class="text-xl font-bold leading-tight tracking-tight text-[#ffbc00] md:text-2xl">
+						<?php echo $post['post_title'] ?>
 					</h1>
 				</div>
-
-				<?php if($this->session->flashdata('success')): ?>
-					<div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
-						<p class="font-bold">Success</p>
-						<p><?php echo $this->session->flashdata('success'); ?></p>
-					</div>
-				<?php endif; ?>
-
-				<?php if($this->session->flashdata('error')): ?>
-					<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
-						<p class="font-bold">Error</p>
-						<p><?php echo $this->session->flashdata('error'); ?></p>
-					</div>
-				<?php endif; ?>
-
-				<?php if($userDetails && $userDetails != false): ?>
-					<div class="flex flex-wrap justify-between">
-						<ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-200 w-full md:w-1/2">
-							<li class="flex items-center">
-								<span class="font-bold text-[#ffbc00]">Nickname:</span>
-								<span class="ml-2"><?php echo $userDetails->nickname ?></span>
-							</li>
-							<li class="flex items-center">
-								<span class="font-bold text-[#ffbc00]">Faction:</span>
-								<span class="ml-2"><?php echo $userDetails->faction ?></span>
-							</li>
-							<li class="flex items-center">
-								<span class="font-bold text-[#ffbc00]">Mutants Killed:</span>
-								<span class="ml-2"><?php echo $userDetails->mutants_killed ?></span>
-							</li>
-						</ul>
-						<ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-200 w-full md:w-1/2">
-							<li class="flex items-center">
-								<span class="font-bold text-[#ffbc00]">Stalkers Killed:</span>
-								<span class="ml-2"><?php echo $userDetails->stalkers_killed ?></span>
-							</li>
-							<li class="flex items-center">
-								<span class="font-bold text-[#ffbc00]">Zones Visited:</span>
-								<span class="ml-2"><?php echo $userDetails->zones_visited ?></span>
-							</li>
-						</ul>
-					</div>
-
-					<div class="flex justify-center">
-						<a href="<?php echo base_url('profile/edit') ?>"
-						   class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-							Edit Profile
-						</a>
-					</div>
-
-				<?php else: ?>
-					<div class="flex justify-center">
-						<p class="text-lg text-[#ffbc00]">No Profile Found</p>
-					</div>
-				<?php endif; ?>
-
+				<div class="flex justify-center">
+					<p class="text-gray-700 dark:text-gray-300">
+						<?php echo $post['post_content'] ?>
+					</p>
+				</div>
 			</div>
 		</div>
 	</div>
 </section>
 </body>
 </html>
+
+<script>
+	document.addEventListener('alpine:init', () => {
+		Alpine.data('zone_show', () => ({
+
+			post_id: '<?php echo $post['post_id'] ?>',
+			user_id: '<?php echo $post['user_id'] ?>',
+			votes: '<?php echo $post['votes'] ?>',
+
+			// triggered when the page is loaded
+			init() {
+				console.log('Zone show page loaded.');
+			},
+
+			upvote() {
+				console.log('Upvoted');
+			},
+
+			downvote() {
+				console.log('Downvoted');
+			}
+
+		}))
+	})
+</script>

@@ -68,3 +68,9 @@ $route['profile/edit'] = 'Auth/ProfileController/edit';
 
 // GUIDE Routes
 $route['guide'] = 'Guide/GuideController/index';
+
+// POST (Blog) Routes
+$route['posts'] = 'Post/PostController/index';
+$route['posts/create'] = 'Post/PostController/create';
+$route['posts/view/(:num)'] = 'Post/PostController/viewPost/$1';
+$route['posts/delete/(:num)'] = 'Post/PostController/delete/$1';

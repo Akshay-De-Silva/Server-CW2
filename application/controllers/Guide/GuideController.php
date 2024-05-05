@@ -20,6 +20,7 @@ class GuideController extends CI_Controller
 	}
 
 	/**
+	 * REST API FUNCTION
 	 * Search for a guide. This is where the AJAX request is sent to.
 	 */
 	public function search()
