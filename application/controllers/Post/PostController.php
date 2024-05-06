@@ -296,8 +296,6 @@ class PostController extends CI_Controller
 		$this->load->model('Comment', 'comment');
 		$result = $this->comment->removeComment($comment_id);
 
-		log_message('info', 'A post has been deleted with the ID' . $comment_id);
-
 		if($result) {
 			$this->output
 				->set_content_type('application/json')
