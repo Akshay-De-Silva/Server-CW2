@@ -214,4 +214,99 @@ class PostController extends CI_Controller
 		}
 	}
 
+	/**
+	 * REST API FUNCTION
+	 * This function will call all the posts available and return a JSON. To be used with AJAX
+	 */
+	public function getComments($post_id) {
+
+		$this->load->model('Comment', 'comment');
+		$result = $this->comment->getComments($post_id);
+
+		if($result != false) {
+
+			$data = array();
+			foreach($result as $row) {
+				$data[] = array(
+					'comment_id' => $row->comment_id,
+
+					'user_id' => $row->user_id, // foreign key
+					'user_nickname' => $row->nickname, // nickname from the users table
+					'user_faction' => $row->faction, // faction from the users table
+
+					'post_id' => $row->post_id,
+					'comment_content' => $row->comment_content,
+				);
+			}
+
+			$this->output
+				->set_content_type('application/json')
+				->set_output(json_encode($data));
+		} else {
+			$this->output
+				->set_content_type('application/json')
+				->set_output(json_encode(false));
+		}
+
+	}
+
+	/**
+	 * REST API FUNCTION (POST Method)
+	 * This function will create a comment for a post
+	 */
+	public function createComment()
+	{
+		$data = array(
+			'user_id' => $this->session->userdata('auth_user')['user_id'], // logged in user
+			'post_id' => $this->input->post('post_id'),
+			'comment_content' => $this->input->post('comment_content'),
+		);
+
+		$this->load->model('Comment', 'comment');
+		$newComment = $this->comment->createComment($data);
+
+		if($newComment) {
+
+			// changes the nickname and faction to the user's nickname and faction. Since its the database key names
+			$newComment->user_nickname = $newComment->nickname;
+			$newComment->user_faction = $newComment->faction;
+
+			// Sends the comments to the view so it can be rendered with AlpineJS in the front-end
+			$this->output
+				->set_content_type('application/json')
+				->set_output(json_encode($newComment));
+
+		} else {
+			$this->output
+				->set_content_type('application/json')
+				->set_output(json_encode(false));
+		}
+
+	}
+
+	/**
+	 * REST API FUNCTION (POST Method)
+	 * This function will delete a comment
+	 */
+	public function removeComment()
+	{
+
+		$comment_id = $this->input->post('comment_id');
+
+		$this->load->model('Comment', 'comment');
+		$result = $this->comment->removeComment($comment_id);
+
+		log_message('info', 'A post has been deleted with the ID' . $comment_id);
+
+		if($result) {
+			$this->output
+				->set_content_type('application/json')
+				->set_output(json_encode(true));
+		} else {
+			$this->output
+				->set_content_type('application/json')
+				->set_output(json_encode(false));
+		}
+	}
+
 }

@@ -121,6 +121,55 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				</div>
 			</div>
 		</div>
+
+		<!-- Comments Section -->
+		<div class="w-2/4 bg-white rounded-lg shadow dark:border md:mt-0 xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+			<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+				<div class="flex justify-center">
+					<h1 class="text-xl font-bold leading-tight tracking-tight text-[#ffbc00] md:text-2xl">
+						Comments
+					</h1>
+				</div>
+				<div class="flex justify-center">
+					<textarea
+						x-model="comment_content"
+						name="comment_content" class="w-full p-2 mt-2 border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-700 dark:text-gray-300"
+							  placeholder="Write a comment..." required></textarea>
+				</div>
+				<button
+					@click="createComment()"
+					type="button" class="w-full p-2 mt-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+					Submit Comment
+				</button>
+
+				<template x-if="comments.length > 0">
+					<template x-for="comment in comments">
+						<div class="flex justify-between">
+							<div>
+								<h2 class="text-lg font-bold leading-tight tracking-tight text-gray-900 dark:text-white">
+									Comment by: <span class="text-blue-600" x-text="comment.user_nickname"></span>
+									<br>
+									<span class="text-sm">Faction:</span> <span class="text-sm text-red-400" x-text="comment.user_faction"></span>
+								</h2>
+								<p class="text-sm text-gray-600 dark:text-gray-300">
+									<span x-text="comment.comment_content"></span>
+								</p>
+
+								<!-- Delete comment button that is only visible to the comment owner -->
+								<template x-if="comment.user_id == <?php echo $this->session->userdata('auth_user')['user_id']; ?>">
+									<div class="mt-4 mr-3">
+										<button class="inline-block px-4 py-2 text-white bg-red-600 dark:bg-red-400 rounded hover:bg-red-700 dark:hover:bg-red-500 transition-colors duration-200"
+												@click="deleteComment(comment.comment_id)">
+											Delete Comment
+										</button>
+									</div>
+								</template>
+							</div>
+						</div>
+					</template>
+				</template>
+			</div>
+		</div>
 	</div>
 </section>
 </body>
@@ -134,12 +183,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			user_id: <?php echo $post['user_id'] ?>,
 			votes: <?php echo $post['votes'] ?>,
 
+			comments: [],
+			comment_content: '',
+
 			// triggered when the page is loaded
 			init() {
 				console.log('Zone show page loaded.');
+
+				// On load gets all comments for the post
+				this.getComments();
 			},
 
-			// REST API call to upvote a post
+			// REST API POST call to upvote a post
 			upvote() {
 				axios.post('<?php echo base_url('Post/PostController/upvote') ?>', {
 					post_id: this.post_id
@@ -160,7 +215,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				});
 			},
 
-			// REST API call to downvote a post
+			// REST API POST call to downvote a post
 			downvote() {
 				axios.post('<?php echo base_url('Post/PostController/downvote') ?>', {
 					post_id: this.post_id
@@ -180,6 +235,79 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					console.log(error);
 				});
 			},
+
+			// REST API GET call to get all comments for a post
+			getComments() {
+				axios.get('<?php echo base_url('comments/getComments/') ?>' + this.post_id)
+				.then(response => {
+					console.log('Comments for post retrieved.');
+					this.comments = response.data;
+				})
+				.catch(error => {
+					console.log('Error retrieving comments.');
+					console.log(error);
+				});
+			},
+
+			// REST API POST call to create a comment
+			createComment() {
+
+				// This checks if the comment content is empty before submitting it.
+				if(this.comment_content === '') {
+					alert('Please enter a comment for it to be submitted.');
+					return;
+				}
+
+				axios.post('<?php echo base_url('Post/PostController/createComment') ?>', {
+					post_id: this.post_id,
+					comment_content: this.comment_content
+				},{
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					}
+				})
+				.then(response => {
+					// Update the comments array with the new comment
+					this.comments.push(response.data);
+
+					// Clear the comment content
+					this.comment_content = '';
+
+					console.log('A new comment added.');
+				})
+				.catch(error => {
+					console.log('Error creating comment.');
+					console.log(error);
+				});
+			},
+
+			// REST API POST call to delete a comment
+			deleteComment(comment_id) {
+
+				// This displays an alert message to confirm if the user wants to delete the comment
+				if(!confirm('Are you sure you want to delete this comment?')) {
+					return;
+				}
+
+				// AJAX request section
+				axios.post('<?php echo base_url('Post/PostController/removeComment') ?>', {
+					comment_id: comment_id
+				},{
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					}
+				})
+				.then(response => {
+					console.log('Comment deleted.');
+
+					// This removes the comment from the comment array by checking the comment id in the existing array
+					this.comments = this.comments.filter(comment => comment.comment_id !== comment_id);
+				})
+				.catch(error => {
+					console.log('Error deleting comment.');
+					console.log(error);
+				});
+			}
 
 		}))
 	})

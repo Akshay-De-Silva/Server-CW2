@@ -14,9 +14,12 @@ class Post extends CI_Model
 	 */
 	public function getAllPosts()
 	{
+		// Selects the posts, along with the user's nickname and faction from the users table
 		$this->db->select('posts.*, users.nickname, users.faction');
 		$this->db->from('posts');
 		$this->db->join('users', 'posts.user_id = users.user_id');
+
+		// Orders the comments by the most recent first
 		$this->db->order_by('posts.post_id', 'DESC');
 
 		$query = $this->db->get();
@@ -33,9 +36,12 @@ class Post extends CI_Model
 	 */
 	public function getPost($id)
 	{
+		// Selects the posts, along with the user's nickname and faction from the users table
 		$this->db->select('posts.*, users.nickname, users.faction');
 		$this->db->from('posts');
 		$this->db->join('users', 'posts.user_id = users.user_id');
+
+		// gets the post that matches the passed in id
 		$this->db->where('post_id', $id);
 
 		$query = $this->db->get();

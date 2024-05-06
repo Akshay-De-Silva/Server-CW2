@@ -74,3 +74,7 @@ $route['posts'] = 'Post/PostController/index';
 $route['posts/create'] = 'Post/PostController/createPost';
 $route['posts/view/(:num)'] = 'Post/PostController/viewPost/$1';
 $route['posts/delete/(:num)'] = 'Post/PostController/deletePost/$1';
+
+// COMMENT Routes
+$route['comments/getComments/(:num)'] = 'Post/PostController/getComments/$1';
+$route['comments/delete/(:num)'] = 'Comment/CommentController/deleteComment/$1';
