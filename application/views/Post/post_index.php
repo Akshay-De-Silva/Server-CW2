@@ -69,7 +69,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <body
 	id="zone_posts"
-	x-data="zone_posts"
 	  class="bg-gray-50 dark:bg-gray-900">
 <section>
 	<div class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0">

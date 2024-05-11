@@ -75,10 +75,20 @@ class Post extends CI_Model
 	 */
 	public function removePost($id)
 	{
+		// delete all the comments associated with the post
 		$this->db->where('post_id', $id);
-		$deleted = $this->db->delete('posts');
+		$commentsDeleted = $this->db->delete('comments');
 
-		if($deleted) {
+		// if the comments were not deleted, return false
+		if(!$commentsDeleted) {
+			return false;
+		}
+
+		// if the comments were deleted, delete the post
+		$this->db->where('post_id', $id);
+		$postsDeleted = $this->db->delete('posts');
+
+		if($postsDeleted) {
 			return true;
 		} else {
 			return false;

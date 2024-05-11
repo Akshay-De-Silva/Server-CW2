@@ -11,11 +11,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<!-- Imports Tailwind CSS by its Official CDN -->
 	<script src="https://cdn.tailwindcss.com"></script>
 
-	<!-- Alpine JS Javascript framework CDN -->
-	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-	<!-- Axios CDN -->
+	<!-- Axios CDN. Used for AJAX Requests -->
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+	<!-- Underscore CDN -->
+	<!-- According to the Backbone.js documentation, this library is a dependency. -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.6/underscore-min.js" integrity="sha512-2V49R8ndaagCOnwmj8QnbT1Gz/rie17UouD9Re5WxbzRVUGoftCu5IuqqtAM9+UC3fwfHCSJR1hkzNQh/2wdtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+	<!-- jQuery CDN -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+	<!-- Backbone.js CDN -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.6.0/backbone-min.js" integrity="sha512-ei5TeAaO5TpzrvI9Y0NP+/gr6cfcF9wmCnuXEXuwLfTsyspAlBjwGSSVkQbZsA8wDC5fEKufEHgMmJ/HPNWlAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
@@ -60,8 +67,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	}
 </style>
 
-<body x-data="zone_show"
+<body
+	id="zone_show"
 	  class="bg-gray-50 dark:bg-gray-900">
+
 <section>
 	<div class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0">
 		<div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white pt-24">
@@ -80,17 +89,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					</div>
 					<div>
 						<div class="flex items-center space-x-2">
-							<button class="p-2 bg-gray-200 rounded-full dark:bg-gray-700"
-									@click="upvote()">
+							<button
+								id="upvoteButton"
+								class="p-2 bg-gray-200 rounded-full dark:bg-gray-700">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
 								</svg>
 							</button>
-							<span x-text="votes"
-								  class="text-gray-700 dark:text-gray-300">
+							<span
+								id="votes_text"
+								class="text-gray-700 dark:text-gray-300">
 							</span>
-							<button class="p-2 bg-gray-200 rounded-full dark:bg-gray-700"
-									@click="downvote()">
+							<button
+								id="downvoteButton"
+								class="p-2 bg-gray-200 rounded-full dark:bg-gray-700">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
 								</svg>
@@ -132,42 +144,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				</div>
 				<div class="flex justify-center">
 					<textarea
-						x-model="comment_content"
+						id="comment_content"
 						name="comment_content" class="w-full p-2 mt-2 border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-700 dark:text-gray-300"
-							  placeholder="Write a comment..." required></textarea>
+							  placeholder="Write a comment..."></textarea>
 				</div>
 				<button
-					@click="createComment()"
+					id="createComment"
 					type="button" class="w-full p-2 mt-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
 					Submit Comment
 				</button>
 
-				<template x-if="comments.length > 0">
-					<template x-for="comment in comments">
-						<div class="flex justify-between">
-							<div>
-								<h2 class="text-lg font-bold leading-tight tracking-tight text-gray-900 dark:text-white">
-									Comment by: <span class="text-blue-600" x-text="comment.user_nickname"></span>
-									<br>
-									<span class="text-sm">Faction:</span> <span class="text-sm text-red-400" x-text="comment.user_faction"></span>
-								</h2>
-								<p class="text-sm text-gray-600 dark:text-gray-300">
-									<span x-text="comment.comment_content"></span>
-								</p>
 
-								<!-- Delete comment button that is only visible to the comment owner -->
-								<template x-if="comment.user_id == <?php echo $this->session->userdata('auth_user')['user_id']; ?>">
-									<div class="mt-4 mr-3">
-										<button class="inline-block px-4 py-2 text-white bg-red-600 dark:bg-red-400 rounded hover:bg-red-700 dark:hover:bg-red-500 transition-colors duration-200"
-												@click="deleteComment(comment.comment_id)">
-											Delete Comment
-										</button>
-									</div>
-								</template>
-							</div>
-						</div>
-					</template>
-				</template>
+				<div class="comments-container">
+					<!-- This is where the comments will be displayed -->
+				</div>
 			</div>
 		</div>
 	</div>
@@ -176,139 +166,259 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </html>
 
 <script>
-	document.addEventListener('alpine:init', () => {
-		Alpine.data('zone_show', () => ({
 
-			post_id: <?php echo $post['post_id'] ?>,
-			user_id: <?php echo $post['user_id'] ?>,
-			votes: <?php echo $post['votes'] ?>,
+	// Backbone.js Model for Post Show
+	var Post = Backbone.Model.extend({
+		defaults: {
+			'post_id': '',
+			'user_id': '',
+			'votes': '',
 
-			comments: [],
-			comment_content: '',
+			'comments': [],
+			'comment_content': ''
+		}
+	});
 
-			// triggered when the page is loaded
-			init() {
-				console.log('Zone show page loaded.');
+	// Backbone.js View for Post Show
+	var PostShowView = Backbone.View.extend({
 
-				// On load gets all comments for the post
-				this.getComments();
-			},
+		el: '#zone_show',
 
-			// REST API POST call to upvote a post
-			upvote() {
-				axios.post('<?php echo base_url('Post/PostController/upvote') ?>', {
-					post_id: this.post_id
-				},{
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					}
-				})
-				.then(response => {
-					console.log('Post Upvoted.')
+		model: new Post(),
 
-					// Update the votes count from the API's response
-					this.votes = response.data.votes;
-				})
-				.catch(error => {
-					console.log('Error Upvoting Post.');
-					console.log(error);
-				});
-			},
+		events: {
+			'click #upvoteButton': 'upvote',
+			'click #downvoteButton': 'downvote',
 
-			// REST API POST call to downvote a post
-			downvote() {
-				axios.post('<?php echo base_url('Post/PostController/downvote') ?>', {
-					post_id: this.post_id
-				},{
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					}
-				})
-				.then(response => {
-					console.log('Post Downvoted.')
+			'input #comment_content': 'updateCommentContent',
+			'click #createComment': 'createComment',
+			'click #deleteComment': 'deleteComment',
+		},
 
-					// Update the votes count from the API's response
-					this.votes = response.data.votes;
-				})
-				.catch(error => {
-					console.log('Error Downvoting Post.');
-					console.log(error);
-				});
-			},
+		initialize: function() {
+			console.log('Zone Show page loaded....');
 
-			// REST API GET call to get all comments for a post
-			getComments() {
-				axios.get('<?php echo base_url('comments/getComments/') ?>' + this.post_id)
+			this.model.set('post_id', <?php echo $post['post_id'] ?>);
+			this.model.set('user_id', <?php echo $post['user_id'] ?>);
+			this.model.set('votes', <?php echo $post['votes'] ?>);
+
+			// sets the number of votes to the text element
+			var votesText = this.$el.find('#votes_text');
+			votesText.text(this.model.get('votes'));
+
+			this.getComments();
+		},
+
+		upvote: function() {
+			axios.post('<?php echo base_url('Post/PostController/upvote') ?>', {
+				post_id: this.model.get('post_id')
+			},{
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			})
+			.then(response => {
+				console.log('Post Upvoted.');
+
+				this.model.set('votes', response.data.votes);
+
+				var votesText = this.$el.find('#votes_text');
+				votesText.text(this.model.get('votes'));
+			})
+			.catch(error => {
+				console.log('Error Upvoting Post.');
+				console.log(error);
+			});
+		},
+
+		downvote: function() {
+			axios.post('<?php echo base_url('Post/PostController/downvote') ?>', {
+				post_id: this.model.get('post_id')
+			},{
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			})
+			.then(response => {
+				console.log('Post Downvoted.');
+
+				this.model.set('votes', response.data.votes);
+
+				var votesText = this.$el.find('#votes_text');
+				votesText.text(this.model.get('votes'));
+			})
+			.catch(error => {
+				console.log('Error Downvoting Post.');
+				console.log(error);
+			});
+		},
+
+		getComments: function() {
+			axios.get('<?php echo base_url('comments/getComments/') ?>' + this.model.get('post_id'))
 				.then(response => {
 					console.log('Comments for post retrieved.');
-					this.comments = response.data;
+					this.model.set('comments', response.data);
+
+					this.renderComments();
 				})
 				.catch(error => {
 					console.log('Error retrieving comments.');
 					console.log(error);
 				});
-			},
+		},
 
-			// REST API POST call to create a comment
-			createComment() {
+		updateCommentContent: function(e) {
+			this.model.set('comment_content', e.target.value);
+		},
 
-				// This checks if the comment content is empty before submitting it.
-				if(this.comment_content === '') {
-					alert('Please enter a comment for it to be submitted.');
-					return;
-				}
+		createComment: function() {
 
-				axios.post('<?php echo base_url('Post/PostController/createComment') ?>', {
-					post_id: this.post_id,
-					comment_content: this.comment_content
-				},{
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					}
-				})
-				.then(response => {
-					// Update the comments array with the new comment
-					this.comments.push(response.data);
-
-					// Clear the comment content
-					this.comment_content = '';
-
-					console.log('A new comment added.');
-				})
-				.catch(error => {
-					console.log('Error creating comment.');
-					console.log(error);
-				});
-			},
-
-			// REST API POST call to delete a comment
-			deleteComment(comment_id) {
-
-				// This displays an alert message to confirm if the user wants to delete the comment
-				if(!confirm('Are you sure you want to delete this comment?')) {
-					return;
-				}
-
-				// AJAX request section
-				axios.post('<?php echo base_url('Post/PostController/removeComment') ?>', {
-					comment_id: comment_id
-				},{
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					}
-				})
-				.then(response => {
-					console.log('Comment deleted.');
-
-					// This removes the comment from the comment array by checking the comment id in the existing array
-					this.comments = this.comments.filter(comment => comment.comment_id !== comment_id);
-				})
-				.catch(error => {
-					console.log('Error deleting comment.');
-					console.log(error);
-				});
+			if(this.model.get('comment_content') === '') {
+				alert('Please enter a comment for it to be submitted.');
+				return;
 			}
 
-		}))
-	})
+			axios.post('<?php echo base_url('Post/PostController/createComment') ?>', {
+				post_id: this.model.get('post_id'),
+				comment_content: this.model.get('comment_content')
+			},{
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			})
+			.then(response => {
+
+				var commentsContainer = this.$el.find('.comments-container');
+
+				commentsContainer.append(`
+						<div
+							data-comment-block-id="${response.data.comment_id}"
+							class="flex justify-between my-4">
+							<div>
+								<h2 class="text-lg font-bold leading-tight tracking-tight text-gray-900 dark:text-white">
+									Comment by: <span class="text-blue-600">${response.data.user_nickname}</span>
+									<br>
+									<span class="text-sm">Faction:</span> <span class="text-sm text-red-400">${response.data.user_faction}</span>
+								</h2>
+								<p class="text-sm text-gray-600 dark:text-gray-300">
+									${response.data.comment_content}
+								</p>
+
+								<!-- Delete comment button that is only visible to the comment owner -->
+								${response.data.user_id == <?php echo $this->session->userdata('auth_user')['user_id']; ?> ? `
+									<div
+										class="mt-4 mr-3">
+										<button
+												id="deleteComment"
+												data-comment-id="${response.data.comment_id}"
+												class="inline-block px-4 py-2 text-white bg-red-600 dark:bg-red-400 rounded hover:bg-red-700 dark:hover:bg-red-500 transition-colors duration-200">
+											Delete Comment
+										</button>
+									</div>
+								` : ''}
+							</div>
+						</div>
+					`);
+
+				console.log('A new comment added.');
+			})
+			.catch(error => {
+				console.log('Error creating comment.');
+				console.log(error);
+			});
+		},
+
+		deleteComment: function(e) {
+
+			if(!confirm('Are you sure you want to delete this comment?')) {
+				return;
+			}
+
+			// finds the comment id from the button's data attribute
+			var comment_id = e.target.getAttribute('data-comment-id');
+
+			axios.post('<?php echo base_url('Post/PostController/removeComment') ?>', {
+				comment_id: comment_id
+			},{
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			})
+			.then(response => {
+
+				// Checks the serve response
+				if(response.data === true) {
+
+					// finds the comment in the comments container
+					var commentsContainer = this.$el.find('.comments-container');
+
+					// removes it from the DOM
+					commentsContainer.find(`[data-comment-block-id="${comment_id}"]`).remove();
+
+					console.log('Comment deleted.');
+				}
+
+			})
+			.catch(error => {
+				console.log('Error deleting comment.');
+				console.log(error);
+			});
+		},
+
+		renderComments: function() {
+
+			var comments = this.model.get('comments');
+			var commentsContainer = this.$el.find('.comments-container');
+
+			if(comments.length > 0) {
+
+				console.log('Rendering comments....');
+
+				comments.forEach(function(comment) {
+
+					commentsContainer.append(`
+						<div
+							data-comment-block-id="${comment.comment_id}"
+							class="flex justify-between my-8">
+							<div>
+								<h2 class="text-lg font-bold leading-tight tracking-tight text-gray-900 dark:text-white">
+									Comment by: <span class="text-blue-600">${comment.user_nickname}</span>
+									<br>
+									<span class="text-sm">Faction:</span> <span class="text-sm text-red-400">${comment.user_faction}</span>
+								</h2>
+								<p class="text-sm text-gray-600 dark:text-gray-300">
+									${comment.comment_content}
+								</p>
+
+								<!-- Delete comment button that is only visible to the comment owner -->
+								${comment.user_id == <?php echo $this->session->userdata('auth_user')['user_id']; ?> ? `
+									<div
+										class="mt-4 mr-3">
+										<button
+												id="deleteComment"
+												data-comment-id="${comment.comment_id}"
+												class="inline-block px-4 py-2 text-white bg-red-600 dark:bg-red-400 rounded hover:bg-red-700 dark:hover:bg-red-500 transition-colors duration-200">
+											Delete Comment
+										</button>
+									</div>
+								` : ''}
+							</div>
+						</div>
+					`);
+
+				});
+
+			} else {
+				console.log('No comments found for this post yet....');
+			}
+
+		},
+
+	});
+
+	// On page load, creates a new instance of the PostShowView
+	window.onload = function() {
+		new PostShowView();
+	};
+
 </script>
