@@ -12,6 +12,7 @@ class ProfileController extends CI_Controller
 		// If the user is not logged in, redirect to the login page
 		if(!get_cookie('authenticated')) {
 
+			log_message('info', 'User tried to access profile page without logging in: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->session->set_flashdata('error', 'Please login to view your profile.');
 			$this->load->view('Auth/Account/login_index');
 
@@ -24,6 +25,7 @@ class ProfileController extends CI_Controller
 			// converts the user details into an array so it can be passed to the view and accessed there
 			$userDetails = array('userDetails' => $userDetails);
 
+			log_message('info', 'User accessed profile page: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->load->view('Auth/Profile/profile_index', $userDetails);
 		}
 	}
@@ -35,6 +37,7 @@ class ProfileController extends CI_Controller
 		// If the user is not logged in, redirect to the login page
 		if(!get_cookie('authenticated')) {
 
+			log_message('info', 'User tried to access profile edit page without logging in: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->session->set_flashdata('error', 'Please login to view your profile.');
 			$this->load->view('Auth/Account/login_index');
 
@@ -47,6 +50,7 @@ class ProfileController extends CI_Controller
 			// converts the user details into an array so it can be passed to the view and accessed there
 			$userDetails = array('userDetails' => $userDetails);
 
+			log_message('info', 'User accessed profile edit page: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->load->view('Auth/Profile/profile_edit', $userDetails);
 
 		}
@@ -95,10 +99,13 @@ class ProfileController extends CI_Controller
 			$auth_user['faction'] = $data['faction'];
 			$this->session->set_userdata('auth_user', $auth_user);
 
+			log_message('info', 'User updated profile: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->session->set_flashdata('success', 'Profile updated successfully.');
 			$this->index();
 
 		} else {
+
+			log_message('info', 'User tried to update profile with invalid data: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->session->set_flashdata('error', 'Please fill in all the required fields.');
 			$this->edit();
 		}

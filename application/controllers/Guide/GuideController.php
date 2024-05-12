@@ -11,10 +11,14 @@ class GuideController extends CI_Controller
 	{
 		// If the user is not logged in, redirect to the login page
 		if(!get_cookie('authenticated')) {
+
+			log_message('info', 'User tried to access guide page without logging in: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->session->set_flashdata('error', 'Please login to view your profile.');
 			$this->load->view('Auth/Account/login_index');
 
 		} else {
+
+			log_message('info', 'User accessed guide page: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->load->view('Guide/guide_view');
 		}
 	}
@@ -42,10 +46,13 @@ class GuideController extends CI_Controller
 				);
 			}
 
+			log_message('info', 'User searched for a guide: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->output
 				->set_content_type('application/json')
 				->set_output(json_encode($data));
 		} else {
+
+			log_message('info', 'No guides were found: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->output
 				->set_content_type('application/json')
 				->set_output(json_encode(false));

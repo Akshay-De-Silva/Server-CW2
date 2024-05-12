@@ -11,10 +11,14 @@ class PostController extends CI_Controller
 	{
 		// If the user is not logged in, redirect to the login page
 		if(!get_cookie('authenticated')) {
+
+			log_message('info', 'User tried to access post page without logging in: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->session->set_flashdata('error', 'Please login to view your profile.');
 			$this->load->view('Auth/Account/login_index');
 
 		} else {
+
+			log_message('info', 'User accessed post page: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->load->view('Post/post_index');
 		}
 	}
@@ -26,10 +30,14 @@ class PostController extends CI_Controller
 	{
 		// If the user is not logged in, redirect to the login page
 		if(!get_cookie('authenticated')) {
+
+			log_message('info', 'User tried to access post creation page without logging in: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->session->set_flashdata('error', 'Please login to view your profile.');
 			$this->load->view('Auth/Account/login_index');
 
 		} else {
+
+			log_message('info', 'User accessed post creation page: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->load->view('Post/post_create');
 		}
 	}
@@ -52,14 +60,20 @@ class PostController extends CI_Controller
 			$newPost = $this->post->createPost($data);
 
 			if($newPost != false) {
+
+				log_message('info', 'User created a post: - ' . date('Y-m-d H:i:s') . ' - (custom)');
 				$this->session->set_flashdata('success', 'Post created successfully!');
 				$this->index();
 			} else {
+
+				log_message('info', 'User failed to create a post: - ' . date('Y-m-d H:i:s') . ' - (custom)');
 				$this->session->set_flashdata('error', 'Something went wrong. Please try again!');
 				$this->createPost();
 			}
 
 		} else {
+
+			log_message('info', 'User failed to create a post: - ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->session->set_flashdata('error', 'Please fill in all the fields.');
 			$this->createPost();
 		}
@@ -92,15 +106,19 @@ class PostController extends CI_Controller
 				);
 			}
 
+			log_message('info', 'User accessed all posts: ' . date('Y-m-d H:i:s') . ' - (custom)');
+
 			$this->output
 				->set_content_type('application/json')
 				->set_output(json_encode($data));
 		} else {
+
+			log_message('info', 'No posts were found: ' . date('Y-m-d H:i:s') . ' - (custom)');
+
 			$this->output
 				->set_content_type('application/json')
 				->set_output(json_encode(false));
 		}
-
 	}
 
 
@@ -111,6 +129,8 @@ class PostController extends CI_Controller
 	{
 		// If the user is not logged in, redirect to the login page
 		if(!get_cookie('authenticated')) {
+
+			log_message('info', 'User tried to access post page without logging in: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->session->set_flashdata('error', 'Please login to view your profile.');
 			$this->load->view('Auth/Account/login_index');
 
@@ -134,9 +154,13 @@ class PostController extends CI_Controller
 					)
 				);
 
+				log_message('info', 'User accessed post: ' . $result->post_title . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
+
 				$this->load->view('Post/post_show', $post);
 
 			} else {
+
+				log_message('info', 'User tried to access a post that does not exist: ' . date('Y-m-d H:i:s') . ' - (custom)');
 				$this->session->set_flashdata('error', 'Something went wrong. Please try again!');
 				$this->index();
 			}
@@ -162,6 +186,8 @@ class PostController extends CI_Controller
 		$this->db->from('posts');
 		$this->db->where('post_id', $post_id);
 		$updatedVotes = $this->db->get()->row()->votes;
+
+		log_message('info', 'User upvoted a post: ' . $post_id . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
 
 		// returns the response as a json, but specifically ONLY the new votes number
 		$this->output
@@ -190,6 +216,8 @@ class PostController extends CI_Controller
 		$this->db->where('post_id', $post_id);
 		$updatedVotes = $this->db->get()->row()->votes;
 
+		log_message('info', 'User downvoted a post: ' . $post_id . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
+
 		// returns the response as a json, but specifically ONLY the new votes number
 		$this->output
 			->set_content_type('application/json')
@@ -206,9 +234,13 @@ class PostController extends CI_Controller
 		$result = $this->post->removePost($post_id);
 
 		if($result) {
+
+			log_message('info', 'User deleted a post: ' . $post_id . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->session->set_flashdata('success', 'Post deleted successfully!');
 			$this->index();
 		} else {
+
+			log_message('info', 'User failed to delete a post: ' . $post_id . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->session->set_flashdata('error', 'Something went wrong. Please try again!');
 			$this->index();
 		}
@@ -239,10 +271,14 @@ class PostController extends CI_Controller
 				);
 			}
 
+			log_message('info', 'User accessed all comments for post: ' . $post_id . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
+
 			$this->output
 				->set_content_type('application/json')
 				->set_output(json_encode($data));
 		} else {
+
+			log_message('info', 'No comments were found for post: ' . $post_id . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->output
 				->set_content_type('application/json')
 				->set_output(json_encode(false));
@@ -271,12 +307,16 @@ class PostController extends CI_Controller
 			$newComment->user_nickname = $newComment->nickname;
 			$newComment->user_faction = $newComment->faction;
 
+			log_message('info', 'User created a comment: ' . $newComment->comment_id . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
+
 			// Sends the comments to the view so it can be rendered with AlpineJS in the front-end
 			$this->output
 				->set_content_type('application/json')
 				->set_output(json_encode($newComment));
 
 		} else {
+
+			log_message('info', 'User failed to create a comment: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->output
 				->set_content_type('application/json')
 				->set_output(json_encode(false));
@@ -297,10 +337,14 @@ class PostController extends CI_Controller
 		$result = $this->comment->removeComment($comment_id);
 
 		if($result) {
+
+			log_message('info', 'User deleted a comment: ' . $comment_id . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->output
 				->set_content_type('application/json')
 				->set_output(json_encode(true));
 		} else {
+
+			log_message('info', 'User failed to delete a comment: ' . $comment_id . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->output
 				->set_content_type('application/json')
 				->set_output(json_encode(false));

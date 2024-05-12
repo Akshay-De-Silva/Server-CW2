@@ -13,6 +13,8 @@ class AccountController extends CI_Controller
 		if(get_cookie('authenticated')) {
 			$this->homePage();
 		} else {
+
+			log_message('info', 'User accessed login page: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->load->view('Auth/Account/login_index');
 		}
 	}
@@ -26,6 +28,8 @@ class AccountController extends CI_Controller
 		if(get_cookie('authenticated')) {
 			$this->homePage();
 		} else {
+
+			log_message('info', 'User accessed registration page: ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->load->view('Auth/Account/signup_index');
 		}
 	}
@@ -35,6 +39,8 @@ class AccountController extends CI_Controller
 	 */
 	public function logout()
 	{
+		log_message('info', 'User logged out: ' . $this->session->userdata('auth_user')['nickname'] . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
+
 		// removes the session key user_data
 		$this->session->unset_userdata('auth_user');
 
@@ -81,12 +87,13 @@ class AccountController extends CI_Controller
 			$this->session->set_userdata('auth_user', $userDetails);
 			$this->session->set_flashdata('success', 'User Account created.');
 
-			// todo: add this to the logs file
-			// todo: change to the landing page
+			log_message('info', 'User created: ' . $userDetails['nickname'] . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
+
 			$this->homePage();
 
 		} else {
 
+			log_message('info', 'User creation failed: ' . $data['nickname'] . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->session->set_flashdata('error', 'Something went wrong. Please try again!');
 			$this->registerIndex();
 		}
@@ -125,16 +132,20 @@ class AccountController extends CI_Controller
 
 				$this->session->set_userdata('auth_user', $userDetails);
 
-				// todo: add this to the logs file
-				// todo: change to the landing page
+				log_message('info', 'User logged in: ' . $userDetails['nickname'] . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
+
 				$this->homePage();
 
 			} else {
+
+				log_message('info', 'User login failed: ' . $data['nickname'] . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
 				$this->session->set_flashdata('error', 'Something went wrong. Please try again!');
 				$this->loginIndex();
 			}
 
 		} else {
+
+			log_message('info', 'User login failed: ' . $data['nickname'] . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
 			$this->session->set_flashdata('error', 'Something went wrong. Please try again!');
 			$this->loginIndex();
 		}
@@ -144,8 +155,13 @@ class AccountController extends CI_Controller
 	{
 		// If the user is logged in
 		if(get_cookie('authenticated')) {
+
+			log_message('info', 'User accessed home page: ' . $this->session->userdata('auth_user')['nickname'] . ' - ' . date('Y-m-d H:i:s') . ' - (custom)');
+
 			$this->load->view('home');
 		} else {
+
+			log_message('info', 'Unauthorized access to home page: ' . date('Y-m-d H:i:s') . ' - (custom)');
 
 			// If the user is NOT logged in
 			$this->session->set_flashdata('error', 'You are not authorized to view this page!');
